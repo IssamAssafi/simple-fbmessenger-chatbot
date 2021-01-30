@@ -8,7 +8,6 @@ app = express();
 port = process.env.PORT || 5000
 
 // Setup Config
-console.log(process.env)
 FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN,
 FB_VERIFY_TOKEN = process.env.FB_VERIFY_TOKEN,
 FB_APP_SECRET = process.env.FB_APP_SECRET
@@ -24,15 +23,15 @@ app.use(body_parser.json({
 
 function check_fb_signature(req, res, buf) {
     console.log('Check facebook signature step.')
-    var fb_signature = req.headers["x-hub-signature"];
+    let fb_signature = req.headers["x-hub-signature"];
     if (!fb_signature) {
         throw new Error('Signature ver failed.');
     } else {
-        var sign_splits = signature.split('=');
-        var method = sign_splits[0];
-        var sign_hash = sign_splits[1];
+        let sign_splits = signature.split('=');
+        let method = sign_splits[0];
+        let sign_hash = sign_splits[1];
 
-        var real_hash = crypto.createHmac('sha1', FB_APP_SECRET)
+        let real_hash = crypto.createHmac('sha1', FB_APP_SECRET)
             .update(buf)
             .digest('hex');
 
@@ -63,7 +62,7 @@ app.listen(port, function () {
 // Handle Post Request to receive messages.
 app.post('/webhook/', function (req, res) {
     console.log('Webhook messaging step.')
-    var chat_data = req.body;
+    let chat_data = req.body;
     // Make sure this is a page subscription
     if (chat_data.object == 'page') {
         // Iterate over each entry
@@ -103,13 +102,13 @@ function hasImage(message_obj){
 
 // Get Message
 function getMessage(message_obj) {
-    var message = message_obj.message.text;
+    let message = message_obj.message.text;
     console.log(message)
 }
 
 // Send Message
 function sendMessage(recipient_id, message, quick_replies=[]) {
-    var messageData = {
+    let messageData = {
         recipient: {
             id: recipient_id
         },
